@@ -5,7 +5,7 @@ enum{
 	OPENING,
 	ACTIVE,
 	INACTIVE,
-	CLOSING
+	CLOSING,
 }
 
 var state : int
@@ -26,15 +26,35 @@ func open_menu(_packedScene : PackedScene) -> void:
 	
 	instance.activeKeys[0] = true
 	instance.parentMenuNode = self
-	
-	instance.state = ACTIVE
+	instance.animationNode.play("Opening")
+	instance.state = OPENING
 
 
 func close_menu(_parentMenuNode) -> void:
-	queue_free()
-	
 	_parentMenuNode.activeKeys[0] = true
-	
 	_parentMenuNode.state = ACTIVE
 	
+	queue_free()
 
+func handle_finished_animation() -> void:
+	match state:
+		OPENING:
+			state = ACTIVE
+			pass
+		
+		CLOSING:
+			if name == "MainMenu":
+				GameManager.GUI_active = false
+				queue_free()
+			else:
+				close_menu(parentMenuNode)
+			
+
+func play_closing_animation() -> void:
+	if animationNode.has_animation("Closing"):
+		animationNode.play("Closing")
+	else :
+		animationNode.play_backwards("Opening")
+		
+	state = CLOSING
+	

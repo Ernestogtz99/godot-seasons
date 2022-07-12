@@ -23,34 +23,17 @@ var selection : int = options.ITEMS
 var space_between : int = 56
 
 func _ready() -> void:
-	parentMenuNode = self
 	state = OPENING
 	GameManager.GUI_active = true
 	animationNode.play("Opening")
 
-func _process(_delta: float) -> void:
-	match state:
-		OPENING:
-			if animationNode.is_playing() == false:
-				state = ACTIVE
-			pass
-		ACTIVE: 
-			#_input
-			pass
-		INACTIVE:
-			pass
-		CLOSING:
-			if animationNode.is_playing() == false:
-				GameManager.GUI_active = false
-				queue_free()
-			pass
-		
 
 func _input(event: InputEvent) -> void:
 	if state == ACTIVE:
+		
 		var selection_changed : bool = false
 		
-		#Manage Selection
+		#MANAGE SELECTION
 		if event.is_action_pressed("ui_left", false): 
 			selection -= 1
 			selection_changed = true
@@ -66,13 +49,12 @@ func _input(event: InputEvent) -> void:
 			selectorNode.position = newPos
 			selectorNode.get_node("AnimatedSprite").frame = 0
 		
-		#Open new Menu
+		
+		#OPEN NEW MENU
 		if event.is_action_pressed("ui_accept"):
 			var menuPackedScene : PackedScene
 			match selection:
 				options.ITEMS:
-#					var instance : Node = itemMenuScene.instance()
-#					get_parent().add_child(instance)
 					menuPackedScene = itemMenuScene
 				
 				options.MAGIC:
@@ -89,8 +71,14 @@ func _input(event: InputEvent) -> void:
 			if menuPackedScene != null:
 				open_menu(menuPackedScene)
 		
-		#Close Menu
-		if event.is_action_pressed("menu") or event.is_action_pressed("ui_cancel"):
-			animationNode.play_backwards("Opening")
-			state = CLOSING
 		
+		#CLOSE MENU
+		if event.is_action_pressed("menu") or event.is_action_pressed("ui_cancel"):
+			play_closing_animation()
+		
+		get_tree().set_input_as_handled()
+
+
+
+func _on_AnimationPlayer_animation_finished(_anim_name: String) -> void:
+	handle_finished_animation()

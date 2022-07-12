@@ -16,7 +16,6 @@ onready var itemLabels : Array = [
 
 
 func _ready() -> void:
-	
 	#Populate Labels' text
 	var n_items := inventory.size()
 	var i := 1
@@ -30,8 +29,12 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	
-	#Close Menu
+	#CLOSE MENU
 	if event.is_action_pressed("ui_cancel"):
 		get_tree().set_input_as_handled()
-		close_menu(parentMenuNode)
+		play_closing_animation()
 		
+
+
+func _on_AnimationPlayer_animation_finished(_anim_name: String) -> void:
+	handle_finished_animation()

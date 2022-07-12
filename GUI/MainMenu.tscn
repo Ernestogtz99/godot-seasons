@@ -144,7 +144,6 @@ position = Vector2( 25, 10 )
 scale = Vector2( 0.45, 0.45 )
 frames = SubResource( 5 )
 animation = "Selector"
-frame = 1
 speed_scale = 0.7
 playing = true
 offset = Vector2( -11.1111, 0 )
@@ -205,3 +204,5 @@ __meta__ = {
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/Opening = SubResource( 1 )
 anims/RESET = SubResource( 2 )
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
