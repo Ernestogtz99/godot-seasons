@@ -2,8 +2,8 @@
 
 [ext_resource path="res://Entities/Meta/Gameplay/MainCamera.gd" type="Script" id=1]
 [ext_resource path="res://Entities/Meta/Map Handler.gd" type="Script" id=2]
-[ext_resource path="res://Maps/Map 1.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Inventory.gd" type="Script" id=4]
+[ext_resource path="res://Maps/Spring.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Entities/Characters/Player/Inventory.gd" type="Script" id=4]
 
 [sub_resource type="Animation" id=1]
 length = 0.001
@@ -55,9 +55,10 @@ tracks/0/keys = {
 [node name="Map Handler" type="Node"]
 script = ExtResource( 2 )
 
-[node name="Map 1" parent="." instance=ExtResource( 3 )]
+[node name="Spring" parent="." instance=ExtResource( 3 )]
 
 [node name="MainCamera" type="Camera2D" parent="."]
+position = Vector2( 166, 109 )
 current = true
 script = ExtResource( 1 )
 __meta__ = {
@@ -81,3 +82,6 @@ __meta__ = {
 
 [node name="Inventory" type="Node" parent="."]
 script = ExtResource( 4 )
+
+[node name="InitSpawner" type="Position2D" parent="."]
+position = Vector2( 122, 104 )

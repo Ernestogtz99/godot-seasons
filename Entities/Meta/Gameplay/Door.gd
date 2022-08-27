@@ -11,6 +11,7 @@ export var closed : bool
 export (String, FILE, "*.tscn") var target_map
 export var map_parameters : Dictionary = {
 	"spawn_player" : true,
+	"season_changed" : false,
 	"spawn_player_data" : {
 		"spawner_name" : "SpawnerA",
 		"facing_dir" : GlobalEnums.Facing_dir.down,
@@ -33,12 +34,20 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if (GameManager.GUI_active == false and GameManager.cutscene_playing == false):
 		if is_instance_valid(playerNode):
-			if overlaps_body(playerNode) and required_facing_dir == playerNode.facing_dir:
+			
+			if overlaps_body(playerNode):
 				if closed:
-					if (Input.is_action_just_pressed("ui_accept")):
+					if required_facing_dir == playerNode.facing_dir and Input.is_action_just_pressed("ui_accept"):
 						emit_signal("change_map", target_map, map_parameters)
 				else:
 					emit_signal("change_map", target_map, map_parameters)
+			
+#			if overlaps_body(playerNode) and required_facing_dir == playerNode.facing_dir:
+#				if closed:
+#					if (Input.is_action_just_pressed("ui_accept")):
+#						emit_signal("change_map", target_map, map_parameters)
+#				else:
+#					emit_signal("change_map", target_map, map_parameters)
 
 
 func set_playerNode(_playerNode : Node) -> void:

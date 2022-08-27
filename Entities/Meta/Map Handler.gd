@@ -13,7 +13,7 @@ const GlobalEnums = preload("res://Entities/Meta/Persistent/GlobalEnums.gd")
 
 onready var mainCameraNode : Camera2D = $MainCamera
 onready var roomTransitionNode : AnimationPlayer = mainCameraNode.get_node("Room Transition")
-onready var playerPackedScene = preload("res://Entities/Character/Character.tscn")
+onready var playerPackedScene = preload("res://Entities/Characters/Player/Player.tscn")
 
 var map_parameters : Dictionary = {}
 var current_map : Node2D
@@ -23,15 +23,15 @@ var state : int = INACTIVE
 
 func _enter_tree() -> void:
 	#DEBUG
-	current_map = get_node("Map 1")
+	current_map = get_node("Spring")
 
 
 func _ready() -> void:
-	
 	#Create player for the first time
 	var instance = playerPackedScene.instance()
 	current_map.get_node("YSort").add_child(instance)
-	instance.position = Vector2(430,113)
+	instance.position = $InitSpawner.position
+	$InitSpawner.queue_free()
 	
 # warning-ignore:return_value_discarded
 	connect("map_has_changed", mainCameraNode, "map_changed")
@@ -86,8 +86,17 @@ func _change_map() -> void:
 func _load_map_parameters() -> void:
 	#Spawn Player
 	if map_parameters.spawn_player :
-		var spawner = current_map.get_node(map_parameters.spawn_player_data.spawner_name)
-		var player := _create_instance_at_pos(playerPackedScene, spawner.position)
+		
+		var new_pos : Vector2
+		
+		if map_parameters.season_changed:
+			new_pos = map_parameters.spawn_player_data.new_pos
+		
+		else:
+			var spawner = current_map.get_node(map_parameters.spawn_player_data.spawner_name)
+			new_pos = spawner.position
+			
+		var player := _create_instance_at_pos(playerPackedScene, new_pos)
 		player.facing_dir = map_parameters.spawn_player_data.facing_dir
 		
 		emit_signal("playerNode_has_changed", player)
