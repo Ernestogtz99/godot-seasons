@@ -1,0 +1,3 @@
+[gd_scene format=2]
+
+[node name="statue_fall" type="Node2D"]

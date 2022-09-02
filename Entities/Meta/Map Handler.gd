@@ -23,7 +23,7 @@ var state : int = INACTIVE
 
 func _enter_tree() -> void:
 	#DEBUG
-	current_map = get_node("Spring")
+	current_map = get_node("Fall")
 
 
 func _ready() -> void:
